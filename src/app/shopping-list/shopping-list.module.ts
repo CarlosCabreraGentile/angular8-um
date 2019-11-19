@@ -12,6 +12,7 @@ import { SharedModule } from "../shared/shared.module";
         ShoppingEditComponent,
     ],
     imports: [
+        //SharedModule just use to use the CommonModule inside
         SharedModule,
         FormsModule,
         RouterModule.forChild([

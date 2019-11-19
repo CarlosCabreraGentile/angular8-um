@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import { Ingredient } from '../shared/ingredients.model';
 import { ShoppingListService } from './shopping-list.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-shopping-list',
@@ -9,23 +11,29 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
-    ingredients: Ingredient[];
+    ingredients: Observable<{ ingredients: Ingredient[] }>;
     private igChangedSubscription: Subscription; 
 
-    constructor(private shoppingListService: ShoppingListService) { }
+    constructor(
+        private shoppingListService: ShoppingListService, 
+        private store: Store<{shoppingList : { ingredients: Ingredient[] }}>) { }
 
     ngOnInit() {
-        this.ingredients = this.shoppingListService.getIngredients();
-        this.igChangedSubscription = this.shoppingListService.ingredientsChanged
-            .subscribe(
-                (ingredients: Ingredient[]) => {
-                    this.ingredients = ingredients;
-                }
-            );
+        //Now selecting the shopping list part of the global store
+        //This give an observable
+        this.ingredients = this.store.select('shoppingList');
+
+        // this.ingredients = this.shoppingListService.getIngredients();
+        // this.igChangedSubscription = this.shoppingListService.ingredientsChanged
+        //     .subscribe(
+        //         (ingredients: Ingredient[]) => {
+        //             this.ingredients = ingredients;
+        //         }
+        //     );
     }
 
     ngOnDestroy() {
-        this.igChangedSubscription.unsubscribe();
+        // this.igChangedSubscription.unsubscribe();
     }
 
     onEditItem(id: number) {

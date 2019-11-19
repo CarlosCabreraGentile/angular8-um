@@ -27,12 +27,11 @@ import { SharedModule } from "../shared/shared.module";
         RecipeEditComponent
      ],
      imports: [
-        [
         RouterModule, 
+        //SharedModule just use to use the CommonModule inside
         SharedModule,
         ReactiveFormsModule,
         RecipesRoutingModule
-        ]
      ] 
 })
 export class RecipesModule {
